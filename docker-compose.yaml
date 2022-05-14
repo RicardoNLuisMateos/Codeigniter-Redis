@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  redis:
+    container_name: redis
+    build: ./redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - './redis/redis_data:/data'
+      - './redis/redis.conf:/usr/local/etc/redis/redis.conf'
+    ports:
+      - '6379:6379'
+  webApp:
+    container_name: webApp
+    image: php:7.3-apache
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./www:/var/www/html
+    ports:
+      - '80:80'
